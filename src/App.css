@@ -1,0 +1,434 @@
+:root {
+  --primary-color: #2d3436;
+  --secondary-color: #636e72;
+  --background-color: #f5f6fa;
+  --text-color: #2d3436;
+  --border-color: #dfe6e9;
+  /* Gradient: blue to purple to pink */
+  --mood-1: #e0e7ff;
+  --mood-2: #b6c6f5;
+  --mood-3: #8da6eb;
+  --mood-4: #6c8ee6;
+  --mood-5: #4f6fdc;
+  --mood-6: #6c5ce7;
+  --mood-7: #a259e6;
+  --mood-8: #d16be6;
+  --mood-9: #e84393;
+  --mood-10: #ff6fae;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.app-header h1 {
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: -0.5px;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.mood-board {
+  width: 100%;
+}
+
+.mood-entry {
+  margin: 0;
+  max-width: 100%;
+  background: none;
+  border-radius: 0;
+  padding: 2.8rem 2.2rem 2.2rem 2.2rem;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  font-size: 1.08rem;
+  animation: fadeInDrawer 0.5s cubic-bezier(.4,0,.2,1);
+}
+@keyframes fadeInDrawer {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+
+.mood-entry h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+  margin-top: 0.2rem;
+  color: var(--primary-color);
+  letter-spacing: -0.5px;
+}
+
+.mood-scale {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  margin-bottom: 0.1rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  max-width: 320px;
+  padding-bottom: 0.2rem;
+}
+
+.mood-scale-button {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: box-shadow 0.18s, transform 0.18s;
+  outline: none;
+  box-shadow: 0 1px 4px rgba(44,62,80,0.07);
+  opacity: 0.92;
+  position: relative;
+}
+.mood-scale-button.selected {
+  box-shadow: 0 0 0 3px var(--primary-color), 0 2px 8px rgba(44,62,80,0.10);
+  transform: scale(1.13);
+  opacity: 1;
+  z-index: 2;
+}
+.mood-scale-button:hover {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.mood-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.7rem 0 0.2rem 0;
+  border-radius: 2px;
+  opacity: 0.7;
+}
+
+.mood-notes {
+  width: 100%;
+  min-height: 44px;
+  max-height: 80px;
+  padding: 0.7rem 0.9rem;
+  border: 1.5px solid var(--border-color);
+  border-radius: 7px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 1.05rem;
+  margin-bottom: 0.1rem;
+  background: #f8f9fa;
+  transition: border 0.18s;
+}
+.mood-notes:focus {
+  border: 1.5px solid var(--primary-color);
+  background: #fff;
+}
+
+.mood-grid-with-labels {
+  display: flex;
+  flex-direction: row;
+}
+
+.weekday-labels {
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--secondary-color);
+  height: 100%;
+  align-items: center;
+  width: 2.2em;
+}
+
+.weekday-label {
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 2px;
+}
+
+.empty-label {
+  width: 2.2em;
+  display: inline-block;
+}
+
+.mood-board-outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f8f9fa;
+  border-radius: 16px;
+  padding: 2rem 1rem 1.5rem 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  margin-bottom: 1.5rem;
+}
+
+.mood-board-grid {
+  display: grid;
+  grid-template-columns: 2em repeat(52, 14px);
+  grid-template-rows: 1.2em repeat(7, 14px);
+  gap: 2px;
+  align-items: center;
+  background: white;
+  border-radius: 12px;
+  padding: 1.2rem 1.2rem 1.2rem 0.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.month-label-cell {
+  grid-row: 1;
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  padding-left: 1px;
+  text-align: left;
+  height: 1.2em;
+  display: flex;
+  align-items: flex-end;
+}
+
+.weekday-label {
+  font-size: 0.8rem;
+  color: var(--secondary-color);
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 1px;
+  grid-column: 1;
+}
+
+.empty-label {
+  width: 2em;
+  height: 1.2em;
+  display: block;
+  grid-row: 1;
+  grid-column: 1;
+}
+
+.mood-cell {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background-color: var(--border-color);
+  transition: transform 0.2s ease;
+  position: relative;
+}
+
+.mood-cell.empty {
+  background: none;
+  pointer-events: none;
+}
+
+.mood-cell:hover {
+  transform: scale(1.5);
+  z-index: 1;
+}
+
+.mood-cell:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  white-space: pre-line;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Mood level colors */
+.mood-0 { background-color: var(--border-color); }
+.mood-1 { background-color: var(--mood-1); }
+.mood-2 { background-color: var(--mood-2); }
+.mood-3 { background-color: var(--mood-3); }
+.mood-4 { background-color: var(--mood-4); }
+.mood-5 { background-color: var(--mood-5); }
+.mood-6 { background-color: var(--mood-6); }
+.mood-7 { background-color: var(--mood-7); }
+.mood-8 { background-color: var(--mood-8); }
+.mood-9 { background-color: var(--mood-9); }
+.mood-10 { background-color: var(--mood-10); }
+
+.mood-board-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mood-legend { display: none; }
+.legend-item { display: none; }
+
+.save-button {
+  width: 100%;
+  padding: 0.7rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.08rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.18s;
+  margin-top: 0.2rem;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+}
+.save-button:disabled {
+  background-color: var(--border-color);
+  color: #b2bec3;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.month-labels {
+  display: grid;
+  grid-template-columns: repeat(53, 1fr);
+  margin-left: 1.5rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+  height: 1.2em;
+}
+
+.month-label {
+  grid-row: 1;
+  justify-self: start;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  padding-left: 2px;
+}
+
+.mood-board-scroll {
+  width: 100%;
+  padding-bottom: 1rem;
+  overflow-x: unset;
+}
+
+.mood-legend {
+  margin-top: 1.5rem;
+}
+
+.legend-item {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 1100px) {
+  .mood-board-grid {
+    min-width: 700px;
+  }
+}
+
+@media (max-width: 800px) {
+  .mood-board-grid {
+    min-width: 500px;
+  }
+}
+
+.mood-drawer {
+  position: fixed;
+  top: 0;
+  right: -440px;
+  width: 400px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -2px 0 32px 0 rgba(44,62,80,0.10);
+  z-index: 1002;
+  transition: right 0.35s cubic-bezier(.4,0,.2,1);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  border-top-left-radius: 24px;
+  border-bottom-left-radius: 24px;
+  overflow: hidden;
+}
+.mood-drawer.open {
+  right: 0;
+}
+.drawer-close {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.2rem;
+  background: none;
+  border: none;
+  font-size: 2.1rem;
+  color: #b2bec3;
+  cursor: pointer;
+  z-index: 1003;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.drawer-close:hover {
+  color: var(--primary-color);
+}
+.drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(44,62,80,0.08);
+  z-index: 1001;
+  backdrop-filter: blur(1.5px);
+}
+
+/* Add Sunday label to the chart */
+.mood-board-grid .sunday-label {
+  grid-row: 1;
+  grid-column: 1;
+  font-size: 0.8rem;
+  color: var(--secondary-color);
+  font-weight: 500;
+  align-self: end;
+  justify-self: end;
+  margin-bottom: 2px;
+}
+
+.mood-summary {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.07);
+  padding: 1.2rem 1.2rem 1.2rem 1.2rem;
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+  animation: fadeInDrawer 0.5s cubic-bezier(.4,0,.2,1);
+}
+.mood-summary .mood-scale-button {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+  box-shadow: 0 1px 4px rgba(44,62,80,0.07);
+}
