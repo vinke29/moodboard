@@ -71,9 +71,10 @@ function App() {
         </div>
         {/* Side Drawer */}
         <div className={`mood-drawer${drawerOpen ? ' open' : ''}`}>
-          <button className="drawer-close" onClick={handleCloseDrawer}>&times;</button>
           {selectedDate && (
             <div className="mood-entry">
+              <h2>How are you feeling on {selectedDate.toLocaleDateString()}?</h2>
+              <button className="drawer-close" onClick={handleCloseDrawer}>&times;</button>
               {/* Show summary if entry exists and not editing */}
               {selectedEntry && !editing ? (
                 <div className="mood-summary">
@@ -91,7 +92,6 @@ function App() {
                 </div>
               ) : (
                 <>
-                  <h2>How are you feeling on {selectedDate.toLocaleDateString()}?</h2>
                   <div className="mood-scale">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((level) => (
                       <button
