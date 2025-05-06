@@ -57,6 +57,11 @@ function App() {
     setEditing(false)
   }
 
+  const formatDate = (date) => {
+    if (!date) return '';
+    return date.toLocaleDateString(undefined, { weekday: 'short', month: 'long', day: 'numeric' });
+  };
+
   return (
     <div className="app">
       <header className="app-header">
@@ -73,19 +78,20 @@ function App() {
         <div className={`mood-drawer${drawerOpen ? ' open' : ''}`}>
           {selectedDate && (
             <div className="mood-entry">
-              <h2>How are you feeling on {selectedDate.toLocaleDateString()}?</h2>
+              <h2>How are you feeling on {formatDate(selectedDate)}?</h2>
               <button className="drawer-close" onClick={handleCloseDrawer}>&times;</button>
               {/* Show summary if entry exists and not editing */}
               {selectedEntry && !editing ? (
                 <div className="mood-summary">
-                  <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginBottom:'0.5rem'}}>
+                  <div style={{display:'flex',alignItems:'center',gap:'0.75rem',marginBottom:'1rem'}}>
                     <span style={{fontWeight:500}}>Mood:</span>
                     <span className={`mood-scale-button mood-${selectedEntry.level}`} style={{border:'none',boxShadow:'none',pointerEvents:'none'}}></span>
-                    <span style={{fontWeight:400}}>{selectedEntry.level}/10</span>
+                    <span style={{fontWeight:400,fontSize:'1.1rem'}}>{selectedEntry.level}/10</span>
                   </div>
                   {selectedEntry.notes && (
-                    <div style={{fontSize:'0.95rem',color:'#636e72',marginBottom:'0.5rem'}}>
-                      <span style={{fontWeight:500}}>Notes:</span> {selectedEntry.notes}
+                    <div style={{fontSize:'1rem',color:'#636e72',marginBottom:'1rem',lineHeight:1.4}}>
+                      <span style={{fontWeight:500,display:'block',marginBottom:'0.5rem'}}>Notes:</span> 
+                      <div style={{background:'rgba(255,255,255,0.5)',padding:'0.75rem',borderRadius:'6px'}}>{selectedEntry.notes}</div>
                     </div>
                   )}
                   <button className="save-button" style={{marginTop:0}} onClick={handleEdit}>Edit</button>
