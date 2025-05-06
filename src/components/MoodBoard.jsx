@@ -6,43 +6,85 @@ function MoodBoard({ moodData, onCellClick }) {
     const dates = [];
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    for (let i = 0; i < 364; i++) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - (363 - i));
-      dates.push(date);
+    
+    // Get today's day of week (0 = Sunday, 1 = Monday, ..., 6 = Saturday)
+    const todayDayOfWeek = today.getDay();
+    
+    // Find the most recent Monday (or today if it's Monday)
+    const mostRecentMonday = new Date(today);
+    const daysToSubtract = todayDayOfWeek === 1 ? 0 : (todayDayOfWeek === 0 ? 6 : todayDayOfWeek - 1);
+    mostRecentMonday.setDate(today.getDate() - daysToSubtract);
+    
+    // Start from 52 weeks ago from the most recent Monday
+    const startDate = new Date(mostRecentMonday);
+    startDate.setDate(mostRecentMonday.getDate() - (7 * 51));
+    
+    // Generate all dates up to today
+    const endDate = new Date(today);
+    for (let currentDate = new Date(startDate); currentDate <= endDate; currentDate.setDate(currentDate.getDate() + 1)) {
+      dates.push(new Date(currentDate));
     }
+    
     return dates;
   };
 
   const dates = generateDates();
 
-  // Arrange dates into columns (weeks), with Monday as the first row and Sunday as the last
+  // Arrange dates into weeks (columns)
   const weeks = [];
-  for (let i = 0; i < 52; i++) {
-    const week = dates.slice(i * 7, (i + 1) * 7);
-    // Reorder so Monday is first, Sunday is last
-    const reordered = [1, 2, 3, 4, 5, 6, 0].map(idx => week[idx]);
-    weeks.push(reordered);
+  let currentWeek = [];
+  
+  // Find the first Monday in our date range
+  const firstDate = new Date(dates[0]);
+  const firstDayOfWeek = firstDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+  
+  // If the first date isn't a Monday, we need to adjust
+  if (firstDayOfWeek !== 1) {
+    // Add placeholder nulls for days before the first Monday
+    const daysToAdd = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+    for (let i = 0; i < daysToAdd; i++) {
+      currentWeek.push(null);
+    }
   }
+  
+  // Add all dates to their respective weeks
+  dates.forEach((date, i) => {
+    const dayOfWeek = date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    
+    // Rearrange to Monday first (1, 2, 3, 4, 5, 6, 0)
+    const adjustedDayIndex = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    
+    // If we're starting a new week
+    if (adjustedDayIndex === 0 && currentWeek.length > 0) {
+      weeks.push([...currentWeek]);
+      currentWeek = [];
+    }
+    
+    // Add date to current week
+    currentWeek[adjustedDayIndex] = date;
+    
+    // If this is the last date, add the final partial week
+    if (i === dates.length - 1) {
+      weeks.push([...currentWeek]);
+    }
+  });
 
   // Month labels: find the first week where a new month starts
   const monthLabels = [];
   let lastMonth = null;
   for (let w = 0; w < weeks.length; w++) {
-    for (let d = 0; d < 7; d++) {
-      const date = weeks[w][d];
-      if (date) {
-        const month = date.toLocaleString('default', { month: 'short' });
-        if (month !== lastMonth) {
-          monthLabels.push({ month, week: w });
-          lastMonth = month;
-        }
-        break;
+    // Find the first non-null date in this week
+    const firstValidDate = weeks[w].find(date => date !== null);
+    if (firstValidDate) {
+      const month = firstValidDate.toLocaleString('default', { month: 'short' });
+      if (month !== lastMonth) {
+        monthLabels.push({ month, week: w });
+        lastMonth = month;
       }
     }
   }
 
-  // Weekday labels (Mon at top, Sun at bottom)
+  // Weekday labels (Mon-Sun)
   const weekdayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
   return (
