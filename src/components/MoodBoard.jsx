@@ -29,6 +29,11 @@ function MoodBoard({ moodData, onCellClick }) {
   };
 
   const dates = generateDates();
+  
+  // Get date range for display
+  const startDateDisplay = dates.length > 0 ? dates[0] : new Date();
+  const endDateDisplay = dates.length > 0 ? dates[dates.length - 1] : new Date();
+  const dateRangeDisplay = `${startDateDisplay.toLocaleDateString(undefined, { month: 'short', year: 'numeric' })} - ${endDateDisplay.toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}`;
 
   // Arrange dates into weeks (columns)
   const weeks = [];
@@ -89,6 +94,9 @@ function MoodBoard({ moodData, onCellClick }) {
 
   return (
     <div className="mood-board-container">
+      <div className="mood-date-range">
+        <span>{dateRangeDisplay}</span>
+      </div>
       <div className="mood-board-outer">
         <div className="mood-board-grid">
           {/* Month labels row */}
@@ -111,10 +119,11 @@ function MoodBoard({ moodData, onCellClick }) {
                 const dateString = date.toISOString().split('T')[0];
                 const moodEntry = moodData[dateString];
                 const moodLevel = moodEntry ? moodEntry.level : 0;
+                const isToday = date.toDateString() === new Date().toDateString();
                 return (
                   <div
                     key={dateString}
-                    className={`mood-cell mood-${moodLevel}`}
+                    className={`mood-cell mood-${moodLevel}${isToday ? ' today' : ''}`}
                     onClick={() => onCellClick(date)}
                     title={`${date.toLocaleDateString()}${moodEntry ? ` - Mood: ${moodLevel}${moodEntry.notes ? `\nNotes: ${moodEntry.notes}` : ''}` : ''}`}
                   />
